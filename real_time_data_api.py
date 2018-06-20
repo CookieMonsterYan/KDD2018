@@ -49,7 +49,7 @@ def request_meo_grid_station(stations, city, start_time, end_time, save_file, ro
         station_data['wind_direction'] = col_wind_direction
         station_data.to_csv(os.path.join(root, '/from_aq_{}_{}.csv'.format(city, aq_stations[i][0])))
 
-#获取当日各种数据
+#requst today's data
 def request_today(city,folder,staions_file,backward_days):
     if not os.path.isdir(folder):
         os.mkdir(folder)

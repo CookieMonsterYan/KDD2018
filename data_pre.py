@@ -37,7 +37,7 @@ maxNan = 10
 '''
 
 '''
-#处理aq数据
+
 data_aq = pd.read_csv(aq_file)
 col_PM2_5 = data_aq["PM2.5"]
 col_PM2_5 = interpolateNan(col_PM2_5,maxNan)
@@ -50,7 +50,7 @@ data_aq.to_csv(new_aq_file)
 '''
 
 '''
-#处理meo数据
+
 data_meo = pd.read_csv(meo_file)
 col_weather = data_meo["weather"]
 col_weather = col_weather.replace("Rain", 1)
@@ -92,7 +92,7 @@ data_meo.to_csv(new_meo_file)
 
 
 '''
-#找到距离aq站最近的meo站
+
 aq_station_file = './data/beijing_aq_stations.csv'
 meo_station_file = './data/beijing_meo_stations.csv'
 aq_meo_station_file = './data/beijing_aq_meo_station.csv'
@@ -116,7 +116,7 @@ aq_meo_station_df.to_csv(aq_meo_station_file)
 
 
 '''
-#根据aq站的坐标找到对应的网格，并从meo grid数据中提取对应的数据
+
 aq_station_file = './data/beijing_aq_stations.csv'
 meo_grid_file = './data/Beijing_historical_meo_grid.csv'
 x_s=115
@@ -148,7 +148,7 @@ data_aq_station.to_csv(aq_station_file)
 '''
 
 '''
-#从aq数据中按照站点提取出数据并存储
+
 new_aq_file = './data/new_beijing_17_18_aq.csv'
 aq_station_file = './data/beijing_aq_stations.csv'
 data_aq_station = pd.read_csv(aq_station_file, usecols=[1,4])
@@ -166,7 +166,7 @@ for i in range(len(aq_stations)):
 ########################################################################################################################
 def calc_station_grid(station_file, x_s, x_e, y_s, y_e, dx, dy, prefix):
     '''
-    根据aq站的坐标找到对应的网格
+    find the gird based on the lon&lat of the stations
     '''
     one_row = math.floor((y_e-y_s)/dy)+1
     data_station = pd.read_csv(station_file, usecols=['station_id','longitude','latitude'])
@@ -190,7 +190,7 @@ def calc_station_grid(station_file, x_s, x_e, y_s, y_e, dx, dy, prefix):
 ################################################################################################################################
 def get_data_from_grid(station_file, grid_file, folder, prefix):
     '''
-    根据站点位置从grid数据文件从提出对应的数据
+    data from the meo grid file
     '''
     start = datetime.datetime(2017,1,1,0)
     end = datetime.datetime(2018,1,30,23)
@@ -221,7 +221,7 @@ def get_data_from_grid(station_file, grid_file, folder, prefix):
 ##############################################################################################################################
 def get_data_from_aqData(station_file, aq_file, new_aq_file, folder, prefix, inter_cols, maxNan=10, fille_nan = -1):
     '''
-    从空气质量站监测数据从提取需要的测站数据，对空值等进行处理
+    air quality data
     '''
     start = datetime.datetime(2017,1,1,0)
     end = datetime.datetime(2018,1,30,23)
@@ -260,7 +260,7 @@ def get_data_from_aqData(station_file, aq_file, new_aq_file, folder, prefix, int
 ##############################################################################################################################
 def get_waether_from_meo(station_file,meo_file,new_meo_file, folder, prefix,):
     '''
-    从气象站数据中提取天气数据
+    weather description data
     '''
     start = datetime.datetime(2017,1,1,0)
     end = datetime.datetime(2018,1,30,23)
@@ -309,7 +309,7 @@ def get_waether_from_meo(station_file,meo_file,new_meo_file, folder, prefix,):
 ######################################################################################################################################
 def get_no2_from_aqData(station_file, aq_file, folder, prefix,start,end):
     '''
-    从气象数据中提取NO2
+    NO2 data
     '''
     total_hours = ((end-start).days+1)*24
     

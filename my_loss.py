@@ -12,7 +12,7 @@ from keras import backend as K
 
 def loss_smape(y_true,y_pred):
     '''
-    smape评分标准作为loss
+    smape
     '''
     a = K.abs(y_true - y_pred)
     b = y_true + y_pred
@@ -22,7 +22,7 @@ def loss_smape(y_true,y_pred):
 
 def loss_smape_rmse(y_true,y_pred):
     '''
-    smape评分标准结合RMSE作为loss
+    smape+RMSE
     '''
     a = K.abs(y_true - y_pred)
     b = y_true + y_pred

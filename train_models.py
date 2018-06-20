@@ -69,8 +69,8 @@ def compare_predict_actual(actual, predicted, save_file):
 #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 def train_model(city, air_code, model_name = 'model_a', train_mother=True, train_child=True, test=False, 
-                  special_date=False, special_startday=None,special_endday=None):
-    #为模型读取数据
+                  special_date=False, special_startday=None,special_endday=None, min_aq=-999, max_aq=1e9):
+    #prepare training data set
     #####################################################################
     meo_codes=['temperature', 'pressure',	'humidity', 'wind_direction',	'wind_speed/kph']
     aq_stations_file = './data/{}_aq_stations.csv'.format(city.lower())
@@ -120,7 +120,7 @@ def train_model(city, air_code, model_name = 'model_a', train_mother=True, train
         data = np.concatenate((data_aq[:len_hours,:], data_meo[:len_hours,:]), axis=1)
         all_data.append(data)
         for i in range(0, (len_hours - window - predict_hours), predict_step):
-            if min(data[i:i+window+predict_hours, 0]) < 0:
+            if min(data[i:i+window+predict_hours, 0]) < 0 or min(data[i:i+window+predict_hours, 0]) < min_aq or max(data[i:i+window+predict_hours, 0]) > max_aq:
                 continue
             day = i//24
             if special_date:
@@ -227,8 +227,7 @@ def train_model(city, air_code, model_name = 'model_a', train_mother=True, train
     x_test_2 = norm_x_pre(x_test_2)
     y_test = norm_y(y_test)
     
-    
-    #模型参数
+    #paras
     ######################################################################
     lr = 1e-5
     batch_size=512
@@ -249,10 +248,11 @@ def train_model(city, air_code, model_name = 'model_a', train_mother=True, train
     test_total_scores = {}
     
     #-----------------------------------------------------------------------------------------------------
+    '''
+    train a model with data in all stations
+    '''
     if train_mother:
-        '''
-        将所有站点的数据混合在一起
-        '''
+        
         input_shape_obs = (window, len(meo_codes)+1)
         input_shape_pre = (predict_hours, len(meo_codes))
         output_shape = predict_hours
@@ -290,7 +290,7 @@ def train_model(city, air_code, model_name = 'model_a', train_mother=True, train
     
     #-----------------------------------------------------------------------------------------------------------------------------------
     '''
-    利用使用全部站点数据训练的模型，在每个站点的数据上再分别训练
+    train models for each station with the mother model
     '''
     
     if train_child:
@@ -351,7 +351,7 @@ def train_model(city, air_code, model_name = 'model_a', train_mother=True, train
     
     #****************************************************************************#
     '''
-    保存全部评分
+    save scores
     '''
     with open (os.path.join(root_model,'scores.json'), 'w') as f:
         json.dump(test_total_scores, f)
@@ -408,6 +408,13 @@ def train_model(city, air_code, model_name = 'model_a', train_mother=True, train
 
 
 if __name__ == "__main__":
+    citys = ['Beijing']
+    air_codes=['PM2.5','PM10','O3']
+    for c in citys:
+        for a in air_codes:
+            print(c)
+            print(a)
+            test = train_model(c,a,model_name = 'model_f')
     
     citys = ['London']
     air_codes=['PM2.5','PM10']

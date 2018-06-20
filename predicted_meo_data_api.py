@@ -107,7 +107,7 @@ def request_from_accuweather(stations, predict_hours, save_file_folder, now=None
         data['wind_speed/kph']=[]
         
         
-        #2018/05/04增加判断文件是否已经存在，如果存在则认为已经抓取不重复抓取
+        
         if check_requested:
             file = '{}.csv'.format(station_id)
             file = os.path.join(folder,file)

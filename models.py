@@ -21,7 +21,7 @@ from keras.layers import Input, Conv1D, concatenate, Embedding, BatchNormalizati
 from keras.utils import plot_model
 
 
-#使用LSTM
+#LSTM
 def model_a(input_rnn1_shape, input_rnn2_shape, output_shape, opt, loss, 
             dim_rnn=[256,256], dim_dense=[512,512,128], drop=0.25,
             activations=['relu','relu','linear']):
@@ -46,7 +46,7 @@ def model_a(input_rnn1_shape, input_rnn2_shape, output_shape, opt, loss,
     return model
 
 
-#使用encoder-decoder lstm
+#encoder-decoder lstm
 def model_f(input_rnn1_shape, input_rnn2_shape, output_shape, opt, loss, 
             dim_rnn=[256,256,256], dim_dense=[512,512,128], drop=0.25,
             activations=['relu','linear']):
